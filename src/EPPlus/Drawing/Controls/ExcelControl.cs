@@ -39,13 +39,32 @@ namespace OfficeOpenXml.Drawing.Controls
         internal ExcelControl(ExcelDrawings drawings, XmlNode drawingNode, ControlInternal control, ZipPackagePart ctrlPropPart, XmlDocument ctrlPropXml, ExcelGroupShape parent = null) :
             base(drawings, drawingNode, "xdr:sp", "xdr:nvSpPr/xdr:cNvPr", parent)
         {
+            NameSpaceManager.AddNamespace("v", ExcelPackage.schemaMicrosoftVml);
+            NameSpaceManager.AddNamespace("o", ExcelPackage.schemaMicrosoftOffice);
+            NameSpaceManager.AddNamespace("x", ExcelPackage.schemaMicrosoftExcel);
+
             _control = control;
-            _vml = (ExcelVmlDrawingControl)drawings.Worksheet.VmlDrawings[LegacySpId];
+            var drawing = drawings.Worksheet.VmlDrawings[LegacySpId];
+
+            _vml = (drawing is OfficeOpenXml.Drawing.Vml.ExcelVmlDrawingComment)
+                ? new ExcelVmlDrawingControl(drawings.Worksheet, TopNode, NameSpaceManager)
+                {
+                    AlternativeText = drawing.AlternativeText,
+                    Anchor = drawing.Anchor,
+                    Id = drawing.Id,
+                    SchemaNodeOrder = drawing.SchemaNodeOrder,
+                    NameSpaceManager = NameSpaceManager,
+                    SpId = drawing.SpId,
+                    TopNode = drawing.TopNode,
+                }
+                : (ExcelVmlDrawingControl)drawing;
+
             _vmlProp = XmlHelperFactory.Create(_vml.NameSpaceManager, _vml.GetNode("x:ClientData"));
             ControlPropertiesXml = ctrlPropXml;
             ControlPropertiesPart = ctrlPropPart;
             ControlPropertiesUri = ctrlPropPart.Uri;
             _ctrlProp = XmlHelperFactory.Create(NameSpaceManager, ctrlPropXml.DocumentElement);
+
         }
         internal ExcelControl(ExcelDrawings drawings, XmlNode drawingNode, string name, ExcelGroupShape parent = null) : 
             base(drawings, drawingNode, "xdr:sp", "xdr:nvSpPr/xdr:cNvPr", parent)
