@@ -9,7 +9,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>net481;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <RootNamespace>EPPlusTest</RootNamespace>
     <AssemblyName>EPPlusTest</AssemblyName>
     <SignAssembly>True</SignAssembly>

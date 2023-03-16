@@ -216,6 +216,15 @@ namespace EPPlusTest
 
             ws.Calculate();
         }
+
+
+        [TestMethod]
+        public void TestSBS()
+        {
+            var pck = new ExcelPackage(new FileInfo(@"C:\Users\ben_k\Documents\GitHub\EPPlus\src\EPPlusTest\Resources\SBS_v12.7.xltm"));
+            var spreadsheetBytes = pck.GetAsByteArray();
+        }
+
         [TestMethod]
         public void CalcTwiceError()
         {
